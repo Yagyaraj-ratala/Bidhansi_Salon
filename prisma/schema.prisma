@@ -1,0 +1,133 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String
+  price       String
+  duration    String   @default("30 mins")
+  category    String   // "salon" or "beauty"
+  subCategory String   // e.g. "Haircut", "Facial"
+  image       String   @default("/images/placeholder.jpg")
+  isPopular   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model SlimmingPackage {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       String
+  duration    String
+  details     String   // Comma-separated or JSON list of what's included
+  image       String   @default("/images/placeholder.jpg")
+  createdAt   DateTime @default(now())
+}
+
+model AcademyCourse {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  duration    String
+  price       String
+  syllabus    String   // Comma-separated list of modules
+  certificate String   // "Yes" or "No"
+  image       String   @default("/images/placeholder.jpg")
+  createdAt   DateTime @default(now())
+}
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  url       String
+  caption   String
+  category  String   // "hair", "bridal", "slimming", "academy", "interior"
+  createdAt DateTime @default(now())
+}
+
+model BeforeAfter {
+  id          String   @id @default(cuid())
+  title       String
+  beforeImage String
+  afterImage  String
+  description String
+  createdAt   DateTime @default(now())
+}
+
+model BlogPost {
+  id             String   @id @default(cuid())
+  title          String
+  slug           String   @unique
+  summary        String
+  content        String   // Markdown or HTML content
+  image          String   @default("/images/placeholder.jpg")
+  seoTitle       String?
+  seoDescription String?
+  seoKeywords    String?
+  createdAt      DateTime @default(now())
+}
+
+model Appointment {
+  id              String   @id @default(cuid())
+  name            String
+  phone           String
+  serviceCategory String   // "Salon Services", "Beauty Services", "Slimming Centre", "Academy"
+  service         String
+  date            String
+  time            String
+  message         String?
+  status          String   @default("Pending") // "Pending", "Confirmed", "Completed", "Cancelled"
+  createdAt       DateTime @default(now())
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String   @default("Client")
+  content   String
+  rating    Int      @default(5)
+  avatar    String   @default("/images/avatar-placeholder.jpg")
+  createdAt DateTime @default(now())
+}
+
+model TeamMember {
+  id          String   @id @default(cuid())
+  name        String
+  designation String
+  image       String   @default("/images/placeholder.jpg")
+  specialty   String
+  bio         String
+  createdAt   DateTime @default(now())
+}
+
+model Offer {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  discountPrice String
+  originalPrice String
+  validUntil    String
+  image         String   @default("/images/placeholder.jpg")
+  createdAt     DateTime @default(now())
+}
+
+model SeoData {
+  id          String   @id @default(cuid())
+  pagePath    String   @unique // e.g. "/", "/about", "/services", "/slimming", "/academy", "/gallery", "/pricing", "/offers", "/blog", "/team", "/contact", "/book"
+  title       String
+  description String
+  keywords    String
+}
+
+model Settings {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
